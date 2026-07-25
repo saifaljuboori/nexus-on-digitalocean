@@ -18,10 +18,10 @@ This project demonstrates how to install, configure, and manage Nexus Repository
 
 ### DigitalOcean Droplet Configuration
 A DigitalOcean Droplet was provisioned to host Nexus Repository Manager. The Droplet settings were as following:
-Operating System = Ubuntu Linux
-CPU = 4 vCPUs
-Memory = 8 GB RAM
-Nexus Port = 8081
+  - Operating System = Ubuntu Linux
+  - CPU = 4 vCPUs
+  - Memory = 8 GB RAM
+  - Nexus Port = 8081
 
 A minimum configuration of 2 vCPUs and 4 GB RAM is recommended for this demo environment to avoid performance issues during Nexus installation and operation.
 
