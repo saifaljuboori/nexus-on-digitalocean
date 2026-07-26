@@ -48,3 +48,15 @@ Expected Outcome:
 
 `openjdk version "17.0.19"`
 
+## Install and Configure Nexus Repository Manager
+
+### Create Nexus User
+Nexus should not run as the root user. A dedicated service account was created to run Nexus with limited permissions.
+
+```
+sudo adduser nexus
+```
+Switch to the Nexus user:
+```
+sudo su - nexus
+```
