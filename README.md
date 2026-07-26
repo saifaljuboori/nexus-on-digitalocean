@@ -294,8 +294,8 @@ gradle.properties
 ```
 Example:
 
-repoUser=<nexus-user>
-repoPassword=<nexus-password>
+repoUser=[nexus-user]
+repoPassword=[nexus-password]
 
 These values are referenced inside `build.gradle`:
 
