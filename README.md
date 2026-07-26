@@ -423,7 +423,7 @@ Create the Maven settings file:
 vim ~/.m2/settings.xml
 ```
 Add the Nexus authentication configuration:
-
+```
 <settings>
     <servers>
         <server>
@@ -433,7 +433,7 @@ Add the Nexus authentication configuration:
         </server>
     </servers>
 </settings>
-
+```
 The <id> value must match the repository ID configured in `pom.xml`:
 <id>nexus-snapshots</id>
 
