@@ -96,3 +96,61 @@ Expected result:
 drwxr-xr-x nexus nexus nexus
 drwxr-xr-x nexus nexus sonatype-work
 ```
+### Configure Nexus to Run as Nexus User
+
+Edit the Nexus configuration file:
+
+```
+vim /opt/nexus/bin/nexus.rc
+```
+
+Set the runtime user:
+```
+run_as_user="nexus"
+```
+This ensures Nexus starts using the dedicated service account.
+
+### Start Nexus Repository Manager
+
+Start Nexus:
+
+```
+/opt/nexus/bin/nexus start
+```
+
+Check Nexus status:
+```
+/opt/nexus/bin/nexus status
+```
+
+Verify that Nexus is listening on port 8081:
+```
+netstat -ltnp | grep 8081
+```
+
+Expected output:
+```
+tcp6  0  0 :::8081  :::*  LISTEN  java
+```
+
+This ensures Nexus starts using the dedicated service account.
+
+### Configure Droplet Firewall
+On the DigitalOcean Firewall, configure the inbound rules to allow incoming traffic on port 8081 so nexus can be accessed externally.
+
+### Access Nexus Repository Manager
+
+Nexus can be accessed from a browser using:
+
+```
+http://<server-ip>:8081
+```
+
+The initial administrator password can be retrieved from:
+
+```
+cat /opt/sonatype-work/nexus3/admin.password
+```
+Use this password for the first login and complete the Nexus setup wizard.
+
+
