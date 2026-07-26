@@ -215,6 +215,7 @@ The user receives repository access through the assigned role rather than throug
 The Gradle sample application included in this repository demonstrates how to build a Java application and publish the generated JAR artifact to a Nexus Maven hosted repository.
 
 The publishing workflow follows this process:
+```
 Java Source Code
 |
 v
@@ -228,6 +229,8 @@ Gradle Publish
 |
 v
 Nexus Maven Hosted Repository
+```
+---
 
 ### Configure Gradle Maven Publishing
 
@@ -352,7 +355,7 @@ The Maven sample application included in this repository demonstrates how to bui
 
 The deployment workflow follows this process:
 
-
+```
 Java Source Code
 |
 v
@@ -366,6 +369,8 @@ Maven Deploy
 |
 v
 Nexus Maven Snapshot Repository
+```
+---
 
 
 ### Configure Maven Nexus Repository
