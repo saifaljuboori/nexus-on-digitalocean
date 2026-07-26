@@ -153,4 +153,19 @@ cat /opt/sonatype-work/nexus3/admin.password
 ```
 Use this password for the first login and complete the Nexus setup wizard.
 
+## Nexus Security Configuration
 
+### Create Nexus Privileges
+
+Nexus Repository Manager uses a role-based access control (RBAC) model where privileges are assigned to roles, and roles are assigned to users.
+
+Custom privileges were created to provide the required access for publishing and managing Maven artifacts.
+
+The following privileges were configured:
+
+| Privilege | Purpose |
+|---|---|
+| `nx-repository-view-maven2-*-*` | Allows viewing and accessing Maven repositories |
+| `nx-repository-admin-maven2-maven-central-*` | Allows administrative operations on Maven repositories |
+
+The privileges were created based on the required operations for publishing Java artifacts built with Maven and Gradle.
