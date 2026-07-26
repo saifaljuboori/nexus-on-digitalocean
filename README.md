@@ -60,3 +60,39 @@ Switch to the Nexus user:
 ```
 sudo su - nexus
 ```
+### Download Nexus Repository Manager
+Navigate to the installation directory:
+```
+cd /opt
+```
+Download Nexus Repository Manager:
+```
+wget https://download.sonatype.com/nexus/3/nexus-3.94.1-06-linux-x86_64.tar.gz
+```
+Extract the Nexus archive:
+```
+tar -xvzf nexus-3.94.1-06-linux-x86_64.tar.gz
+```
+The following directories are generated:
+nexus >> contains Nexus application runtime files
+sonatype-work >> contains Nexus repository data and configuration
+
+### Assign Ownership to Nexus User
+
+The Nexus user must own both the application directory and the data directory.
+
+Change ownership:
+
+```
+sudo chown -R nexus:nexus /opt/nexus
+sudo chown -R nexus:nexus /opt/sonatype-work
+```
+Verify ownership:
+```
+ls -l /opt
+```
+Expected result:
+```
+drwxr-xr-x nexus nexus nexus
+drwxr-xr-x nexus nexus sonatype-work
+```
