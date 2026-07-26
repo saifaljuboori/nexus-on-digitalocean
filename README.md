@@ -169,3 +169,43 @@ The following privileges were configured:
 | `nx-repository-admin-maven2-maven-central-*` | Allows administrative operations on Maven repositories |
 
 The privileges were created based on the required operations for publishing Java artifacts built with Maven and Gradle.
+
+### Create Nexus Role
+
+A custom role was created to group the required repository privileges.
+
+Navigation:
+```
+Administration → Security → Roles → Create Role
+```
+
+Role configuration:
+
+| Setting | Value |
+|---|---|
+| Role ID | `nx` |
+| Role Name | `nx-java` |
+| Assigned Privileges | `nx-repository-view-maven2-*-*` |
+|  | `nx-repository-admin-maven2-maven-central-*` |
+
+Using roles instead of assigning privileges directly to users provides centralized permission management and makes future access changes easier to maintain.
+
+### Create Nexus User
+
+A dedicated Nexus user was created for artifact publishing.
+
+Navigation:
+
+```
+Administration → Security → Users → Create User
+```
+
+
+User configuration:
+
+| Setting | Value |
+|---|---|
+| Username | `saif` |
+| Assigned Role | `nx-java` |
+
+The user receives repository access through the assigned role rather than through direct privilege assignment.
