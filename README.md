@@ -215,7 +215,6 @@ The user receives repository access through the assigned role rather than throug
 The Gradle sample application included in this repository demonstrates how to build a Java application and publish the generated JAR artifact to a Nexus Maven hosted repository.
 
 The publishing workflow follows this process:
-
 Java Source Code
 |
 v
@@ -243,7 +242,7 @@ java-gradle-app/build.gradle
 
 The project defines a Maven publication that publishes the generated JAR file:
 
-```groovy
+```
 publishing {
     publications {
         create("maven", MavenPublication) {
@@ -253,7 +252,7 @@ publishing {
         }
     }
 }
-
+```
 The artifact version is generated from the Gradle project version configuration, and the resulting JAR file is uploaded to the Nexus Maven hosted repository.
 
 Configure Nexus Repository
