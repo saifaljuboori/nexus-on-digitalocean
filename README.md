@@ -209,3 +209,267 @@ User configuration:
 | Assigned Role | `nx-java` |
 
 The user receives repository access through the assigned role rather than through direct privilege assignment.
+
+## Publish Java Gradle Application
+
+The Gradle sample application included in this repository demonstrates how to build a Java application and publish the generated JAR artifact to a Nexus Maven hosted repository.
+
+The publishing workflow follows this process:
+
+Java Source Code
+|
+v
+Gradle Build
+|
+v
+Generate JAR Artifact
+|
+v
+Gradle Publish
+|
+v
+Nexus Maven Hosted Repository
+
+### Configure Gradle Maven Publishing
+
+The Gradle project uses the `maven-publish` plugin to publish the generated Java artifact to Nexus Repository Manager.
+
+The publishing configuration is defined in:
+
+```
+java-gradle-app/build.gradle
+```
+
+
+The project defines a Maven publication that publishes the generated JAR file:
+
+```groovy
+publishing {
+    publications {
+        create("maven", MavenPublication) {
+            artifact("build/libs/my-app-$version.jar") {
+                extension 'jar'
+            }
+        }
+    }
+}
+
+The artifact version is generated from the Gradle project version configuration, and the resulting JAR file is uploaded to the Nexus Maven hosted repository.
+
+Configure Nexus Repository
+
+The Nexus repository configuration is defined in the Gradle publishing repository block:
+
+repositories {
+    maven {
+        name 'nexus'
+        url "http://<nexus-server-ip>:8081/repository/maven-repo/"
+        allowInsecureProtocol = true
+
+        credentials {
+            username project.repoUser
+            password project.repoPassword
+        }
+    }
+}
+
+Repository configuration in Nexus UI:
+
+| Setting         | Value        |
+| --------------- | ------------ |
+| Repository Name | `maven-repo` |
+| Repository Type | Maven Hosted |
+| Protocol        | HTTP         |
+| Port            | `8081`       |
+
+The `allowInsecureProtocol` setting is required because the Nexus instance is configured using HTTP. Gradle blocks insecure HTTP repository communication unless it is explicitly allowed.
+
+Configure Nexus Credentials
+
+Authentication credentials are stored outside the project source code.
+
+The Gradle project reads credentials from:
+
+```
+gradle.properties
+```
+Example:
+
+repoUser=<nexus-user>
+repoPassword=<nexus-password>
+
+These values are referenced inside `build.gradle`:
+
+credentials {
+    username project.repoUser
+    password project.repoPassword
+}
+
+The credentials file should never be committed to GitHub.
+
+Build the Java Application
+
+The application is built using Gradle:
+
+```
+gradle build
+```
+
+The generated artifact is created under:
+```
+build/libs/
+```
+
+Example:
+```
+build/libs/my-app-1.0.0.jar
+```
+Publish Artifact to Nexus
+
+After successfully building the application, the JAR artifact is published to Nexus:
+```
+gradle publish
+```
+
+The artifact is published to:
+```
+http://<nexus-server-ip>:8081/repository/maven-repo/
+```
+Verify Artifact in Nexus Repository Manager
+
+After publishing:
+
+  - Login to Nexus Repository Manager
+  - Navigate to:
+```
+Browse → maven-repo
+```
+  - Verify that the Java application artifact is available.
+The artifact is now stored in Nexus and can be consumed by other applications through the Maven repository URL.
+
+## Publish Java Maven Application
+
+The Maven sample application included in this repository demonstrates how to build a Java application and deploy the generated JAR artifact to a Nexus Maven snapshot repository.
+
+The deployment workflow follows this process:
+
+
+Java Source Code
+|
+v
+Maven Build
+|
+v
+Generate JAR Artifact
+|
+v
+Maven Deploy
+|
+v
+Nexus Maven Snapshot Repository
+
+
+### Configure Maven Nexus Repository
+
+The Maven project uses Maven's deployment mechanism to upload the generated Java artifact to Nexus Repository Manager.
+
+The repository configuration is defined inside:
+```
+java-maven-app/pom.xml
+```
+
+The project is configured to deploy snapshot artifacts using the `distributionManagement` section:
+
+```
+<distributionManagement>
+    <snapshotRepository>
+        <id>nexus-snapshots</id>
+        <url>http://<nexus-server-ip>:8081/repository/maven-snapshots/</url>
+    </snapshotRepository>
+</distributionManagement>
+```
+Repository configuration in Nexus UI:
+
+| Setting         | Value             |
+| --------------- | ----------------- |
+| Repository Name | `maven-snapshots` |
+| Repository Type | Maven Hosted      |
+| Deployment Type | Snapshot          |
+| Protocol        | HTTP              |
+| Port            | `8081`            |
+
+The repository is configured as a snapshot repository because the Maven project version contains the `SNAPSHOT` identifier.
+
+Maven uses the `snapshotRepository` configuration when deploying snapshot versions.
+
+Create Maven Settings Configuration
+
+Maven requires authentication credentials to upload artifacts to Nexus.
+
+Credentials are stored in Maven's user-level configuration file:
+```
+~/.m2/settings.xml
+```
+Create the Maven configuration directory:
+```
+mkdir -p ~/.m2
+```
+Create the Maven settings file:
+```
+vim ~/.m2/settings.xml
+```
+Add the Nexus authentication configuration:
+
+<settings>
+    <servers>
+        <server>
+            <id>nexus-snapshots</id>
+            <username><nexus-user></username>
+            <password><nexus-password></password>
+        </server>
+    </servers>
+</settings>
+
+The <id> value must match the repository ID configured in `pom.xml`:
+<id>nexus-snapshots</id>
+
+Maven uses this matching ID to locate the correct credentials when deploying artifacts.
+
+The `settings.xml` file is stored outside the project repository and should never be committed to GitHub because it contains sensitive authentication information.
+
+Build the Maven Application
+
+The Maven application was built using:
+```
+mvn package
+```
+
+The generated artifact is available under:
+```
+target/my-app-1.0-SNAPSHOT.jar
+```
+
+Deploy Artifact to Nexus
+
+After successfully building the application, the JAR artifact is deployed to the Nexus Maven snapshot repository.
+
+Execute:
+```
+mvn deploy
+```
+
+The artifact is deployed to:
+```
+http://<nexus-server-ip>:8081/repository/maven-snapshots/
+```
+Verify Artifact in Nexus Repository Manager
+
+After deploying the artifact:
+
+  - Login to Nexus Repository Manager
+  - Navigate to:
+```
+Browse → maven-snapshots
+```
+  - Locate the uploaded Maven artifact.
+The Java Maven artifact is now stored in Nexus and can be consumed by other applications through the configured Maven repository URL.
